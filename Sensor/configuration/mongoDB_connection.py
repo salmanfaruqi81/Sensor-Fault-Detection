@@ -1,5 +1,5 @@
 import pymongo
-#from Sensor.constant.databse import DATABASE_NAME
+from Sensor.constant.databse import DATABASE_NAME
 import certifi
 import os
 
@@ -19,7 +19,7 @@ class MongoDBClient:
 
             self.client = MongoDBClient.client
             self.database = self.client(database_name)
-            self.database_name = "salmanf"
+            self.database_name = DATABASE_NAME
 
         except Exception as e:
             raise e
