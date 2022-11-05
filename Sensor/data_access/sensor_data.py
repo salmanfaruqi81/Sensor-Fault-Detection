@@ -9,6 +9,7 @@ from Sensor.constant.database import DATABASE_NAME
 from Sensor.exception import SensorException
 
 
+
 class SensorData:
     """
     This class help to export entire mongo db record as pandas dataframe

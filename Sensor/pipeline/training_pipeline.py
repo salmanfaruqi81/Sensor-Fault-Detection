@@ -1,9 +1,10 @@
-from Sensor.entity.artifact_entity import DataIngestionArtifact
-from Sensor.entity.config_entity import TrainingPipelineConfig, DataIngestionConfig
+from Sensor.entity.artifact_entity import DataIngestionArtifact, DataValidationArtifact
+from Sensor.entity.config_entity import TrainingPipelineConfig, DataIngestionConfig, DataValidationConfig
 from Sensor.exception import SensorException
 import sys, os
 from Sensor.logger import logging
 from Sensor.components.data_ingestion import DataIngestion
+from Sensor.components.data_validation import DataValidation
 
 class TrainPipeline:
 
@@ -25,9 +26,19 @@ class TrainPipeline:
         except Exception as e:
             raise SensorException(e, sys)
 
-    def start_data_validation(self):
-        try:
-            pass
+    def start_data_validation(self, data_ingestion_artifact:DataIngestionArtifact) -> DataValidationArtifact:
+        logging.info("Entered the start_data_validation method of TrainPipeline Class")
+
+        try: #2:27
+            data_validation_config = DataValidationConfig(training_pipeline_config=self.training_pipeline_config)
+            data_validation = DataValidation(data_ingestion_artifact=data_ingestion_artifact,
+            data_validation_config = data_validation_config
+            )
+            data_validation_artifact =  data_validation.initiate_data_validation()
+            logging.info("Performed the Data Validation Operation")
+
+            logging.info("Exited the start_data_validation method of Pipeline")
+            #return data_validation_artifact
         except Exception as e:
             raise SensorException(e, sys)
 
@@ -58,7 +69,9 @@ class TrainPipeline:
 
     def run_pipeline(self):
         try:
-            data_ingestion_artifact = self.start_data_ingestion()
+            data_ingestion_artifact:DataIngestionArtifact = self.start_data_ingestion()
+
+            data_validation_artifact =  self.start_data_validation(data_ingestion_artifact = data_ingestion_artifact)
             
         
         except Exception as e:
