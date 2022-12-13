@@ -137,10 +137,12 @@ class DataValidation:
             validation_status = status,
             valid_train_fiLe_path = self.data_ingestion_artifact.trained_file_path,
             valid_test_file_path = self.data_ingestion_artifact.test_file_path,
-            invalid_train_file_path = self.data_validation_config.invalid_train_file_path,
-            invalid_test_file_path = self.data_validation_config.invalid_test_file_path,
+            invalid_train_file_path = None, # self.data_validation_config.invalid_train_file_path,
+            invalid_test_file_path = None, #self.data_validation_config.invalid_test_file_path,
             drift_report_file_path = self.data_validation_config.drift_report_file_path
             )
+            logging.info(f"Data Validation Artifact: {data_validation_artifact}")
+            return data_validation_artifact
 
         except EXCEPTION as e:
             raise SensorException(e,sys)
