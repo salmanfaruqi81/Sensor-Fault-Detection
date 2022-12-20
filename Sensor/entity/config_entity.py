@@ -3,10 +3,8 @@ import os
 from dataclasses import dataclass
 from Sensor.constant import *
 from Sensor.constant import training_pipeline
-from Sensor.constant.training_pipeline import DATA_INGESTION_COLLECTION_NAME, DATA_INGESTION_DIR_NAME, DATA_INGESTION_FEATURE_STORE_DIR, DATA_INGESTION_INGESTED_DIR, DATA_INGESTION_TRAIN_TEST_SPLIT_RATION, PIPELINE_NAME, ARTIFACT_DIR, TEST_FILE_NAME, TRAIN_FILE_NAME,FILE_NAME
 
-
-TIMESTAMP: str = datetime.now().strftime("%m_%d_%Y_%H_%M_%S")
+# TIMESTAMP: str = datetime.now().strftime("%m_%d_%Y_%H_%M_%S")
 
 #@dataclass
 class TrainingPipelineConfig:
@@ -26,7 +24,7 @@ class TrainingPipelineConfig:
 
 '''
 
-training_pipeline_config: TrainingPipelineConfig = TrainingPipelineConfig()
+# training_pipeline_config: TrainingPipelineConfig = TrainingPipelineConfig()
 
 
 class DataIngestionConfig:
@@ -37,15 +35,15 @@ class DataIngestionConfig:
         )
 
         self.feature_store_file_path: str = os.path.join(
-            self.data_ingestion_dir, training_pipeline.DATA_INGESTION_FEATURE_STORE_DIR, FILE_NAME
+            self.data_ingestion_dir, training_pipeline.DATA_INGESTION_FEATURE_STORE_DIR, training_pipeline.FILE_NAME
         )
 
         self.training_file_path: str = os.path.join(
-            self.data_ingestion_dir, training_pipeline.DATA_INGESTION_INGESTED_DIR, TRAIN_FILE_NAME
+            self.data_ingestion_dir, training_pipeline.DATA_INGESTION_INGESTED_DIR, training_pipeline.TRAIN_FILE_NAME
         )
 
         self.testing_file_path: str = os.path.join(
-            self.data_ingestion_dir, training_pipeline.DATA_INGESTION_INGESTED_DIR, TEST_FILE_NAME
+            self.data_ingestion_dir, training_pipeline.DATA_INGESTION_INGESTED_DIR, training_pipeline.TEST_FILE_NAME
         )
 
         self.train_test_split_ratio: float = training_pipeline.DATA_INGESTION_TRAIN_TEST_SPLIT_RATION
@@ -68,10 +66,9 @@ class DataValidationConfig:
 
 class DataTransformationConfig:
     def __init__(self,training_pipeline_config:TrainingPipelineConfig):
-        self.data_transformation_dir:str = os.path.join(training_pipeline_config.artifact_dir, training_pipeline.DATA_TRANSFORMATION_DIR_NAME)
-        self.transformed_train_file_path: str = os.path.join(self.data_transformation_dir, training_pipeline.DATA_TRANSFORMATION_TRANSFORMED_DATA_DIR,
-        training_pipeline.TRAIN_FILE_NAME.replace("csv", "npy"),)
-
+        self.data_transformation_dir: str = os.path.join( training_pipeline_config.artifact_dir,training_pipeline.DATA_TRANSFORMATION_DIR_NAME )
+        self.transformed_train_file_path: str = os.path.join( self.data_transformation_dir,training_pipeline.DATA_TRANSFORMATION_TRANSFORMED_DATA_DIR,
+            training_pipeline.TRAIN_FILE_NAME.replace("csv", "npy"),)
         self.transformed_test_file_path: str = os.path.join(self.data_transformation_dir,  training_pipeline.DATA_TRANSFORMATION_TRANSFORMED_DATA_DIR,
             training_pipeline.TEST_FILE_NAME.replace("csv", "npy"), )
         self.transformed_object_file_path: str = os.path.join( self.data_transformation_dir, training_pipeline.DATA_TRANSFORMATION_TRANSFORMED_OBJECT_DIR,
@@ -79,3 +76,43 @@ class DataTransformationConfig:
 
        # self.transformed_test_file_path: str = os.path.join(self.data_transformation_dir, training_pipeline.DATA_TRANSFORMATION_TRANSFORMED_OBJECT_DIR,
         # training_pipeline.PREPROCESSING_OBJECT_FILE_NAME, )
+
+class ModelTrainerConfig:
+
+
+    def __init__(self,training_pipeline_config:TrainingPipelineConfig):
+        self.model_trainer_dir: str = os.path.join(
+            training_pipeline_config.artifact_dir, training_pipeline.MODEL_TRAINER_DIR_NAME
+        )
+        self.trained_model_file_path: str = os.path.join(
+            self.model_trainer_dir, training_pipeline.MODEL_TRAINER_TRAINED_MODEL_DIR, 
+            training_pipeline.MODEL_FILE_NAME
+        )
+        self.expected_accuracy: float = training_pipeline.MODEL_TRAINER_EXPECTED_SCORE
+        self.overfitting_underfitting_threshold = training_pipeline.MODEL_TRAINER_OVER_UNDER_FITTING_THRESHOLD
+
+
+class ModelEvaluationConfig:    
+    def __init__(self, training_pipeline_config:TrainingPipelineConfig):
+        self.model_evaluation_dir: str = os.path.join(
+            training_pipeline_config.artifact_dir, training_pipeline.MODEL_EVALUATION_DIR_NAME
+        )
+
+        self.report_file_path = os.path.join(self.model_evaluation_dir, training_pipeline.MODEL_EVALUATION_REPORT_FILE_NAME)
+
+        self.change_threshold = training_pipeline.MODEL_EVALUATION_CHANGED_THRESHOLD_SCORE
+
+
+class ModelPusherConfig:
+
+    def __init__(self, training_pipeline_config:TrainingPipelineConfig):
+        self.model_evaluation_dir: str = os.path.join(
+            training_pipeline_config.artifact_dir, training_pipeline.MODEL_PUSHER_DIR_NAME
+        )
+        
+        self.model_file_path = os.path.join(self.model_evaluation_dir, training_pipeline.MODEL_FILE_NAME)
+        timestamp = round(datetime.now().timestamp)
+        self.saved_model_path = os.path.join(
+            training_pipeline.SAVED_MODEL_DIR, 
+            f"{timestamp}",
+            training_pipeline.MODEL_FILE_NAME)

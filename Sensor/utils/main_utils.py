@@ -1,7 +1,7 @@
 import yaml
 from Sensor.exception import SensorException
 import Sensor
-import os,sys
+import os, sys
 import numpy as np
 from Sensor.logger import logging
 import dill
@@ -64,8 +64,20 @@ def save_object(file_path:str, obj:object) -> None:
         os.makedirs(os.path.dirname(file_path), exist_ok=True)
         with open(file_path, "wb") as file_obj:
             dill.dump(obj, file_obj)
-        logging.info("Exited the save_object method of MinUtils class")
+        logging.info("Exited the save_object method of MainUtils class")
     except Exception as e:
         raise SensorException(e,sys) from e
 
+def load_object(file_path:str) -> object:
+
+    try:
+        if not os.path.exists(file_path):
+            raise Exception(f"The file {file_path} does not exist")
+
+        with open(file_path, "rb") as file_obj:
+            return dill.load(file_obj)
+            
+        
+    except Exception as e:
+        raise SensorException(e,sys) from e
 
