@@ -80,7 +80,7 @@ class ModelEvaluation:
                     trained_model_path=train_model_file_path,
                     train_model_metric_artifact=trained_metric,
                     best_model_metric_artifact=latest_metric)
-            model_eval_report = model_evaluation_artifact.__dict__()
+            model_eval_report = model_evaluation_artifact.__dict__
 
             # Saving the report
             write_yaml_file(self.model_eval_config.report_file_path, model_eval_report)

@@ -19,7 +19,7 @@ from Sensor.utils.main_utils import load_object
 from fastapi.middleware.cors import CORSMiddleware
 import numpy as np
 # env_file_path="/config/env.yaml"
-'''
+
 env_file_path=os.path.join(os.getcwd(),"env.yaml")
 
 def set_env_variable(env_file_path):
@@ -91,10 +91,10 @@ if __name__=="__main__":
     main()
     # set_env_variable(env_file_path)
     # app_run(app, host=APP_HOST, port=APP_PORT)
-'''
 
 
 
+"""
 
 # env_file_path=os.path.join(os.getcwd(),"env.yaml")
 
@@ -156,3 +156,4 @@ if __name__=='__main__':
 
 '''
 
+"""
