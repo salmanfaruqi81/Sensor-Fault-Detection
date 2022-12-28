@@ -109,7 +109,7 @@ class TrainPipeline:
             model_pusher_artifact = self.start_model_pusher(model_eval_artifact)
             
             TrainPipeline.is_pipeline_running = False
-            
+            logging.info("Completed the Pipeline and created Saved_model folder for pickle file. The Pipeline will terminate here")
         except Exception as e:
             raise SensorException(e,sys)
 
